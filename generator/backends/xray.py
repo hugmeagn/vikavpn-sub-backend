@@ -8,16 +8,21 @@ from ..users import get_or_create_uid
 def setup_xray(credentials, xray_privkey):
     Path('data').mkdir(parents=True, exist_ok=True)
 
-    clients = [{"id": get_or_create_uid(username), "flow": "xtls-rprx-vision"} for username in credentials.keys()]
+    uuids = [get_or_create_uid(username) for username in credentials.keys()]
+    clients = [{"id": uuid} for uuid in uuids]
+    clients_with_flow = [{"id": uuid, "flow": "xtls-rprx-vision"} for uuid in uuids]
 
     with open("templates/xray.json") as f:
         config = json.load(f)
 
     for inbound in config["inbounds"]:
-        inbound["settings"]["clients"] = clients
-        inbound["streamSettings"]["realitySettings"]["privateKey"] = xray_privkey
+        if inbound["streamSettings"]["network"] == "tcp":
+            inbound["settings"]["clients"] = clients_with_flow
+            inbound["streamSettings"]["realitySettings"]["privateKey"] = xray_privkey
+        else:
+            inbound["settings"]["clients"] = clients
 
     with open("/usr/local/etc/xray/config.json", "w") as f:
-        json.dump(config, f, indent=4)
+        json.dump(config, f, indent=2)
 
     subprocess.run(["systemctl", "restart", "xray"])

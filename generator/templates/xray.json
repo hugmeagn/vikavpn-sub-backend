@@ -15,11 +15,25 @@
         "security": "reality",
         "realitySettings": {
           "show": false,
-          "dest": "www.github.com:443",
+          "dest": "www.apple.com:443",
           "xver": 0,
-          "serverNames": ["www.github.com"],
+          "serverNames": ["www.apple.com"],
           "privateKey": "EDIT-BY-PROGRAM",
           "shortIds": [""]
+        }
+      }
+    },
+    {
+      "port": 9000,
+      "protocol": "vless",
+      "settings": {
+        "clients": ["EDIT-BY-PROGRAM"],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/"
         }
       }
     }

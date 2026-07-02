@@ -31,9 +31,24 @@ proxies:
     reality-opts:
       public-key: {REALITY-PUBLIC-KEY}
       short-id: ""
-    servername: www.github.com
+    servername: www.apple.com
     client-fingerprint: chrome
     flow: xtls-rprx-vision
+
+  - name: yac-whitelist-bypass
+    type: vless
+    server: d5di74d7ba67eunopj5t.nkhmighe.apigw.yandexcloud.net
+    port: 443
+    uuid: {UUID}
+    encryption: none
+    tls: true
+    udp: true
+    servername: d5di74d7ba67eunopj5t.nkhmighe.apigw.yandexcloud.net
+    network: ws
+    ws-opts:
+      path: /
+      headers:
+        Host: d5di74d7ba67eunopj5t.nkhmighe.apigw.yandexcloud.net
 
   - name: mieru-udp
     type: mieru
@@ -73,9 +88,10 @@ proxy-groups:
   - name: PROXY
     type: fallback
     proxies:
-    - 443-tcp
     - proxy-trust
+    - 443-tcp
     - mieru-udp
+    - yac-whitelist-bypass
     url: 'https://www.gstatic.com/generate_204'
     interval: 900
     lazy: false
@@ -92,6 +108,8 @@ proxy-groups:
 
 rules:
   - GEOSITE,tiktok,443-tcp
+  - DOMAIN-KEYWORD,sex-studentki,PROXY
+  - GEOSITE,pornhub,PROXY
   - GEOSITE,facebook,PROXY
   - GEOSITE,instagram,PROXY
   - GEOSITE,openai,PROXY
@@ -103,7 +121,6 @@ rules:
   - GEOIP,telegram,PROXY,no-resolve
   - IP-CIDR,194.221.250.50/32,PROXY,no-resolve
   - GEOSITE,supercell,PROXY
-  - GEOIP,supercell,PROXY,no-resolve
   - GEOSITE,github,PROXY
   - GEOSITE,google,PROXY
 
